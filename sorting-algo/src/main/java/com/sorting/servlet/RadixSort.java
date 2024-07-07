@@ -1,22 +1,11 @@
 package com.sorting.servlet;
 
-import java.util.List;
-import java.util.ArrayList;
-
 public class RadixSort {
     
-    // Method to sort the given array using Radix Sort and return the result as a List
-    public List sort(int[] array){
-        
-        // Create a List to store the result
-        List result = new ArrayList<>();
-        
+    // Method to sort the given array using Radix Sort and return the result as an array
+    public int[] sort(int[] array) {
         // Clone the input array to avoid modifying the original array
         int[] input = array.clone(); 
-        result.add(input); // Add the input array to the result list
-        
-        // Start measuring the time
-        double startTime = System.nanoTime();
         
         // Get the maximum element in the array to determine the number of digits
         int max = getMax(array);
@@ -26,26 +15,8 @@ public class RadixSort {
             countSort(array, exp);
         }
         
-        // End measuring the time
-        double endTime = System.nanoTime();
-        
-        // Calculate the time taken in milliseconds
-        double timeTaken = (endTime - startTime) / 1_000_000;
-        
-        // Clone the sorted array
-        int[] sortedArray = array.clone();
-        
-        // Add the sorted array to the result list
-        result.add(sortedArray);
-        
-        // Add the time taken to the result list
-        result.add(timeTaken);
-        
-        // Add the sorting algorithm name to the result list
-        result.add("Radix Sort");
-        
-        // Return the result list
-        return result;
+        // Return the sorted array
+        return array;
     }
 
     // Method to get the maximum value in the array
@@ -61,16 +32,21 @@ public class RadixSort {
 
     // Method to perform counting sort on the array based on the digit represented by exp
     private void countSort(int[] array, int exp) {
-        int n = array.length; // Get the size of the array
-        int[] output = new int[n]; // Output array to store sorted elements
-        int[] count = new int[10]; // Count array to store count of occurrences of digits
+        int n = array.length;
+        int[] output = new int[n]; // output array
+        int[] count = new int[10]; // count array
 
-        // Store count of occurrences of each digit
+        // Initialize count array to 0
+        for (int i = 0; i < 10; i++) {
+            count[i] = 0;
+        }
+
+        // Store the count of occurrences in count[]
         for (int i = 0; i < n; i++) {
             count[(array[i] / exp) % 10]++;
         }
 
-        // Change count[i] so that it contains the actual position of this digit in the output array
+        // Change count[i] so that count[i] contains the actual position of this digit in output[]
         for (int i = 1; i < 10; i++) {
             count[i] += count[i - 1];
         }
@@ -81,7 +57,7 @@ public class RadixSort {
             count[(array[i] / exp) % 10]--;
         }
 
-        // Copy the output array to the original array so that array now contains sorted numbers according to the current digit
+        // Copy the output array to array[], so that array now contains sorted numbers
         for (int i = 0; i < n; i++) {
             array[i] = output[i];
         }
